@@ -1,0 +1,57 @@
+{
+  "$schema": "https://agentskills.io/schemas/marketplace-manifest.v1.json",
+  "name": "brand-ai-readiness-audit",
+  "version": "1.0.0",
+  "displayName": "Brand AI Readiness Audit",
+  "description": "Comprehensive audit marketplace suite evaluating AI-readiness across discoverability, crawlability, entity corroboration, and on-site intent fulfillment.",
+  "entrypoint": "skills/audit-orchestrator",
+  "author": {
+    "name": "Brand AI Readiness Team",
+    "url": "https://agentskills.io"
+  },
+  "license": "Apache-2.0",
+  "tags": [
+    "ai-readiness",
+    "seo",
+    "llm-crawlers",
+    "schema-org",
+    "brand-truth",
+    "intent-matching",
+    "audit"
+  ],
+  "skills": [
+    {
+      "id": "audit-orchestrator",
+      "name": "Audit Orchestrator",
+      "role": "Entrypoint Orchestrator",
+      "path": "skills/audit-orchestrator",
+      "entrypointScript": "scripts/run_full_audit.py",
+      "description": "Aggregates sub-skills and emits final standardized JSON report matching contest schema."
+    },
+    {
+      "id": "crawl-render-audit",
+      "name": "Crawl & Render Audit",
+      "role": "Discoverability: Crawlability & Rendering",
+      "path": "skills/crawl-render-audit",
+      "entrypointScript": "scripts/check_crawl_render.py",
+      "description": "Inspects robots.txt bot rules, CSR vs SSR density gap, Schema.org coverage, and /llms.txt endpoints."
+    },
+    {
+      "id": "freshness-corroboration",
+      "name": "Freshness & Entity Corroboration",
+      "role": "Discoverability: Entity Authority & Freshness",
+      "path": "skills/freshness-corroboration",
+      "entrypointScript": "scripts/check_freshness.py",
+      "description": "Validates sameAs entity links, Wikidata/Knowledge Graph alignment, dateModified/sitemap freshness, and brand-truth.json."
+    },
+    {
+      "id": "engagement-audit",
+      "name": "On-Site Engagement & Intent Match",
+      "role": "On-Site Engagement & Intent Match",
+      "path": "skills/engagement-audit",
+      "entrypointScript": "scripts/check_engagement.py",
+      "description": "Evaluates ?intent= preservation, deep-link fragment navigation, PropertyValue spec schemas, and AI Intent Bridge micro-banners."
+    }
+  ]
+}
+
