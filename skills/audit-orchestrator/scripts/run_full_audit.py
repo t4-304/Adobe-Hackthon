@@ -114,18 +114,22 @@ def run_full_audit(target_url: str) -> dict:
 def main():
     parser = argparse.ArgumentParser(description="Brand AI Readiness Audit Orchestrator")
     parser.add_argument("--url", required=True, help="Target website URL to audit")
-    parser.add_argument("--output", help="Output JSON report file path")
+    parser.add_argument("--output", help="Output JSON report file path", default=None)
     args = parser.parse_args()
 
     report_dict = run_full_audit(args.url)
     json_output = json.dumps(report_dict, indent=2)
+    print(json_output)
 
-    if args.output:
-        with open(args.output, "w", encoding="utf-8") as f:
-            f.write(json_output)
-        print(f"Audit report saved to {args.output}")
-    else:
-        print(json_output)
+    # Auto-save to results/ folder
+    clean_domain = extract_domain(args.url).replace("www.", "")
+    results_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "results"))
+    os.makedirs(results_dir, exist_ok=True)
+    out_file = args.output or os.path.join(results_dir, f"{clean_domain}_report.json")
+    with open(out_file, "w", encoding="utf-8") as f:
+        f.write(json_output)
+    print(f"\n[Audit report saved to {out_file}]")
+
 
 
 if __name__ == "__main__":

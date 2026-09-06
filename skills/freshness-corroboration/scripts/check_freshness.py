@@ -80,5 +80,19 @@ def audit_freshness(target_url: str) -> List[Any]:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Freshness & Entity Corroboration Module")
     parser.add_argument("--url", required=True, help="Target URL")
+    parser.add_argument("--output", help="Optional output JSON file path", default=None)
     args = parser.parse_args()
-    print(json.dumps(audit_freshness(args.url), indent=2))
+
+    findings = audit_freshness(args.url)
+    json_output = json.dumps(findings, indent=2)
+    print(json_output)
+
+    # Auto-save to results folder
+    clean_domain = args.url.replace("https://", "").replace("http://", "").replace("www.", "").split("/")[0].rstrip("/")
+    results_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "results"))
+    os.makedirs(results_dir, exist_ok=True)
+    out_file = args.output or os.path.join(results_dir, f"{clean_domain}_freshness_report.json")
+    with open(out_file, "w", encoding="utf-8") as f:
+        f.write(json_output)
+    print(f"\n[Saved to {out_file}]")
+
