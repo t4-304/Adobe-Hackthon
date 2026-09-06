@@ -8,7 +8,7 @@ import sys
 import os
 import argparse
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Add current and parent scripts dir to sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,7 @@ def run_full_audit(target_url: str) -> dict:
     """
     target_url = normalize_url(target_url)
     domain = extract_domain(target_url)
-    audited_at = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    audited_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     all_findings = []
 
