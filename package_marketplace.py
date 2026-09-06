@@ -11,7 +11,7 @@ def package_marketplace(site_name=None):
         zip_path = f"{clean_name} AI readiness test.zip"
     else:
         clean_name = None
-        zip_path = "AI readiness test.zip"
+        zip_path = "brand-ai-readiness-audit.zip"
 
     if clean_name:
         report_file = f"{clean_name}_report.json"
