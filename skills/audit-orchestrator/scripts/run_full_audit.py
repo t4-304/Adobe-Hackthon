@@ -30,26 +30,43 @@ def run_full_audit(target_url: str) -> dict:
 
     all_findings = []
 
-    # 1. Run Crawl & Render Audit Module (if available)
+    # Base skills dir
+    base_skills_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+
+    # 1. Run Crawl & Render Audit Module
     try:
-        from skills.crawl_render_audit.scripts.check_crawl_render import audit_crawl_render
-        all_findings.extend(audit_crawl_render(target_url))
-    except (ImportError, Exception) as e:
-        # Fallback graceful check if module pending
+        crawl_script = os.path.join(base_skills_dir, "crawl-render-audit", "scripts", "check_crawl_render.py")
+        if os.path.exists(crawl_script):
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("check_crawl_render", crawl_script)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            all_findings.extend(mod.audit_crawl_render(target_url))
+    except Exception as e:
         pass
 
-    # 2. Run Freshness & Corroboration Audit Module (if available)
+    # 2. Run Freshness & Corroboration Audit Module
     try:
-        from skills.freshness_corroboration.scripts.check_freshness import audit_freshness
-        all_findings.extend(audit_freshness(target_url))
-    except (ImportError, Exception) as e:
+        fresh_script = os.path.join(base_skills_dir, "freshness-corroboration", "scripts", "check_freshness.py")
+        if os.path.exists(fresh_script):
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("check_freshness", fresh_script)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            all_findings.extend(mod.audit_freshness(target_url))
+    except Exception as e:
         pass
 
-    # 3. Run Engagement & Intent Match Audit Module (if available)
+    # 3. Run Engagement & Intent Match Audit Module
     try:
-        from skills.engagement_audit.scripts.check_engagement import audit_engagement
-        all_findings.extend(audit_engagement(target_url))
-    except (ImportError, Exception) as e:
+        eng_script = os.path.join(base_skills_dir, "engagement-audit", "scripts", "check_engagement.py")
+        if os.path.exists(eng_script):
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("check_engagement", eng_script)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            all_findings.extend(mod.audit_engagement(target_url))
+    except Exception as e:
         pass
 
     # Renumber Finding IDs cleanly (F-001, F-002, ...)

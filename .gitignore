@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.zip
+*.json
+!marketplace.json
+.vscode/
+.idea/
