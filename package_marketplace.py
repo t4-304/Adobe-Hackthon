@@ -10,7 +10,7 @@ def package_marketplace(site_name):
     zip_path = f"{clean_name} AI readiness test.zip"
     
     report_file = f"{clean_name}_report.json"
-    readme_file = "README.md"
+    readme_file = f"{clean_name}_README.md"
     
     print(f"Running audit for {clean_name}...")
     
